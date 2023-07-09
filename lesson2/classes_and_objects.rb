@@ -357,7 +357,7 @@ person1.secret = 'Shh.. this is a secret!'
 person1.share_secret
 
 #11
-=end
+
 class Person
   attr_writer :secret
 
@@ -378,3 +378,86 @@ person2 = Person.new
 person2.secret = 'Shh.. this is a different secret!'
 
 puts person1.compare_secret(person2)
+
+
+Second Pass
+#1
+class Person
+  attr_accessor :name
+
+  def initialize(name)
+    @name = name
+  end
+end
+
+bob = Person.new('bob')
+puts bob.name                  # => 'bob'
+bob.name = 'Robert'
+puts bob.name                  # => 'Robert'
+
+#2 - 4
+=end
+
+# class Person
+#   attr_accessor :first_name, :last_name
+
+#   def initialize(name)
+#     split_name(name)
+#   end
+
+#   def name
+#     "#{first_name} #{last_name}"
+#   end
+
+#   def name=(name)
+#     split_name(name)
+#   end
+
+#   def same_name?(other)
+#     name == other.name
+#   end
+
+#   private
+
+#   def split_name(name)
+#     @first_name, @last_name = name.split(' ')
+#   end
+# end
+
+# bob = Person.new('Robert Smith')
+# rob = Person.new('Robert Smith')
+# puts bob.same_name?(rob)
+# puts bob.name == rob.name
+# bob = Person.new('Robert')
+# puts bob.name                  # => 'Robert'
+# puts bob.first_name            # => 'Robert'
+# puts bob.last_name             # => ''
+# bob.last_name = 'Smith'
+# puts bob.name                  # => 'Robert Smith'
+
+# bob.name = "John Adams"
+# puts bob.first_name            # => 'John'
+# puts bob.last_name             # => 'Adams'
+
+#5
+#Attempting to interpolating the variable referecing a custom object into a
+#string with output the entire object, if the class number followed by the
+#encoded located in memory. To fix this code, we can either override #to_s
+#and create a custom #to_s method that returns just the value associated with
+#the #name instance variable, or we can call the #name getter method on the
+#instance referenced by `bob`, interpolating the name directly.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

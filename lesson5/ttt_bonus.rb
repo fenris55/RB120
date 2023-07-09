@@ -7,6 +7,10 @@ module Displayable
     puts ""
   end
 
+  def display_names
+    puts "Hi, #{human.name}! Your computer opponent is: #{computer.name}."
+  end
+
   def display_board
     puts "#{human.name} is an #{human.marker}. #{computer.name} is an #{computer.marker}."
     puts ""
@@ -313,6 +317,7 @@ class TTTGame
   def pick_names
     human.pick_name
     computer.pick_name
+    display_names
   end
 
   def pick_markers

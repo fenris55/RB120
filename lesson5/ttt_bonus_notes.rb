@@ -329,11 +329,33 @@ passing player marker. However, my execution kept skipping over them.
 #attempt at implementing offensive play using helper methods and a main move
 method from the computer class. Could revisit.
 
- # def choose_middle_square(board)
+
+additional thought:
+helpers were not working because they were all executing. To mave a "computer move"
+method that just lists the helper methods,I need 2 methods for each: 1 to inform the 
+if condiiton (middle space is availble, computer has 2 ina row, player has 2 in a row,
+else -> sample)
+
+so that would look like: (and the 2 elsif are the same method, with different 
+markers as arguments)
+
+def computer_move
+  if middle_space_empty?
+    choose_middle_space
+  elsif two_in_a_word(computer_marker)
+    #make offenive move
+  elsif two_in_a_row(player_marker)
+    #make defensive move
+  else
+    select_random_square
+  end
+end
+ #def choose_middle_square(board)
   #   board[5] = marker
   # end
 
   # def choose_winning_square(board, marker)
+  
   #   winning_space = board.intelligent_play(marker)
   #     if !!winning_space
   #       binding.pry

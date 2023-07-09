@@ -568,86 +568,269 @@ puts byron.title
 Retrying Easy2.9
 =end
 
-module Walkable
-  def walk
-    "#{self} #{gait} forward"
-  end
+# module Walkable
+#   def walk
+#     "#{self} #{gait} forward"
+#   end
 
-  def to_s
-    name
-  end
+#   def to_s
+#     name
+#   end
 
-end
+# end
 
-class Person
-  include Walkable
-  attr_reader :name
+# class Person
+#   include Walkable
+#   attr_reader :name
 
-  def initialize(name)
+#   def initialize(name)
+#     @name = name
+#   end
+
+#   private
+
+#   def gait
+#     "strolls"
+#   end
+# end
+
+# class Cat
+#   include Walkable
+#   attr_reader :name
+
+#   def initialize(name)
+#     @name = name
+#   end
+
+#   private
+
+#   def gait
+#     "saunters"
+#   end
+# end
+
+# class Cheetah < Cat
+#   private
+
+#   def gait
+#     "runs"
+#   end
+# end
+
+# class Noble < Person
+#   attr_reader :title
+
+#   def initialize(name, title)
+#     super(name)
+#     @title = title
+#   end
+
+#   def to_s
+#     "#{name} #{title}"
+#   end
+
+#   private
+
+#   def gait
+#     "struts"
+#   end
+# end
+
+# byron = Noble.new("Byron", "Lord")
+# puts byron.walk
+# # => "Lord Byron struts forward"
+
+# puts byron.name #=> "Byron"
+# puts byron.title #=> "Lord"
+
+# charlie =Cat.new("Charles")
+# puts charlie.name
+# puts charlie.walk
+
+#retrying Easy 2.7
+
+# class Pet
+#   attr_reader :type, :name
+
+#   def initialize(type, name)
+#     @type = type
+#     @name = name
+#   end
+# end
+
+# class Owner
+#   attr_reader :name
+#   attr_accessor :number_of_pets
+
+#   def initialize(name)
+#     @name = name
+#     @number_of_pets = 0
+#   end
+# end
+
+# class Shelter
+#   attr_reader :register
+
+#   def initialize
+#     @register = {}
+#   end
+
+#   def adopt(owner, pet)
+#     if register.keys.include?(owner)
+#       @register[owner] << pet
+#     else
+#       @register[owner] = [pet]
+#     end
+#     owner.number_of_pets += 1 #this works - is it OOP enough?
+#   end
+
+#   #not sure -> is the bleow nested iteration too procedural?
+#   def print_adoptions
+#     register.each do |owner, pets|
+#       puts "#{owner.name} has adopted the following pets:"
+#       pets.each do |pet|
+#         puts "a #{pet.type} named #{pet.name}"
+#       end
+#       puts ""
+#     end
+#   end
+# end
+
+#lesson solution below. I think it's a bit more object-oriented. Creates more
+#specific behaviors so that the overall code is less procedural.
+
+class Pet
+  attr_reader :animal, :name
+
+  def initialize(animal, name)
+    @animal = animal
     @name = name
   end
 
-  private
-
-  def gait
-    "strolls"
+  #custom #to_s handles formatting from within the animal class. Makes for
+  #cleaner code later on that stays more focused on shelter functionality
+  #downside -> this format may not be what we always want to see when passed
+  #to #puts
+  def to_s
+    "a #{animal} named #{name}"
   end
 end
 
-class Cat
-  include Walkable
+class Owner
   attr_reader :name
+  attr_accessor :pets
 
   def initialize(name)
     @name = name
+    @pets = []
   end
 
-  private
-
-  def gait
-    "saunters"
-  end
-end
-
-class Cheetah < Cat
-  private
-
-  def gait
-    "runs"
-  end
-end
-
-class Noble < Person
-  attr_reader :title
-
-  def initialize(name, title)
-    super(name)
-    @title = title
+  def add_pets(pet)
+    @pets << pet
   end
 
-  def to_s
-    "#{name} #{title}"
+  def number_of_pets
+    pets.size
   end
 
-  private
-
-  def gait
-    "struts"
+  def print_pets
+    puts pets
   end
 end
 
-byron = Noble.new("Byron", "Lord")
-puts byron.walk
-# => "Lord Byron struts forward"
+class Shelter
+  attr_reader :pet_list
 
-puts byron.name #=> "Byron"
-puts byron.title #=> "Lord"
+  def initialize
+    @owners = {}
+    @pet_list =[]
+  end
 
-charlie =Cat.new("Charles")
-puts charlie.name
-puts charlie.walk
+  def add_pet(type, name)
+    new_pet = Pet.new(type, name)
+    @pet_list << new_pet
+  end
+
+  def number_of_shelter_pets
+    pet_list.size
+  end
+
+  def adopt(owner, pet)
+    owner.add_pets(pet)
+    @owners[owner.name] ||= owner #owner name is key, owner instance is value
+  end
+
+  def print_adoptions
+    @owners.each_pair do |name, owner|
+      puts "#{name} has adopted the following pets:"
+      owner.print_pets
+      puts
+    end
+  end
+
+  def print_available_pets
+    puts "The Animal Shelter has the following unadopted pets:"
+    puts pet_list
+    puts
+  end
+end
+
+butterscotch = Pet.new('cat', 'Butterscotch')
+pudding      = Pet.new('cat', 'Pudding')
+darwin       = Pet.new('bearded dragon', 'Darwin')
+kennedy      = Pet.new('dog', 'Kennedy')
+sweetie      = Pet.new('parakeet', 'Sweetie Pie')
+molly        = Pet.new('dog', 'Molly')
+chester      = Pet.new('fish', 'Chester')
+terra        = Pet.new('golden retriever', 'Terra')
+
+phanson = Owner.new('P Hanson')
+bholmes = Owner.new('B Holmes')
+rbiancofiore = Owner.new('R Biancofiore')
+
+shelter = Shelter.new
+
+shelter.add_pet('dog', 'Asta')
+shelter.add_pet('dog', 'Laddie')
+shelter.add_pet('cat', 'Fluffy')
+shelter.add_pet('cat', 'Kat')
+shelter.add_pet('cat', 'Ben')
+shelter.add_pet('parakeet', 'Chatterbox')
+shelter.add_pet('parakeet', 'Bluebell')
+
+shelter.adopt(phanson, butterscotch)
+shelter.adopt(phanson, pudding)
+shelter.adopt(phanson, darwin)
+shelter.adopt(bholmes, kennedy)
+shelter.adopt(bholmes, sweetie)
+shelter.adopt(bholmes, molly)
+shelter.adopt(bholmes, chester)
+shelter.adopt(rbiancofiore, terra)
+
+shelter.print_adoptions
+shelter.print_available_pets
+
+puts "#{phanson.name} has #{phanson.number_of_pets} adopted pets."
+puts "#{bholmes.name} has #{bholmes.number_of_pets} adopted pets."
+puts "#{rbiancofiore.name} has #{rbiancofiore.number_of_pets} adopted pet."
+puts "The animal shelter has #{shelter.number_of_shelter_pets} unadopted pets."
 
 
+# add code to produce the following output:
+
+# The Animal Shelter has the following unadopted pets:
+# a dog named Asta
+# a dog named Laddie
+# a cat named Fluffy
+# a cat named Kat
+# a cat named Ben
+# a parakeet named Chatterbox
+# a parakeet named Bluebell
+#   ...
+
+# P Hanson has 3 adopted pets.
+# B Holmes has 4 adopted pets.
+# The Animal shelter has 7 unadopted pets.
 
 
 
